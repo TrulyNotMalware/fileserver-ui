@@ -1,5 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
 
+import { AuthHydrator } from '@/components/layout/AuthHydrator';
+
 import { Router } from './Router';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -15,7 +17,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Router />
+        <AuthHydrator>
+          <Router />
+        </AuthHydrator>
       </BrowserRouter>
     </QueryClientProvider>
   );

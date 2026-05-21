@@ -15,6 +15,7 @@ interface FileTableProps {
   downloadingPath: string | null;
   onDownload: (filePath: string) => void;
   onUpload: (file: File) => void;
+  canUpload: boolean;
 }
 
 export function FileTable({
@@ -26,8 +27,10 @@ export function FileTable({
   downloadingPath,
   onDownload,
   onUpload,
+  canUpload,
 }: FileTableProps) {
-  const { showHidden, toggleHidden } = useFileStore();
+  const showHidden = useFileStore((s) => s.showHidden);
+  const toggleHidden = useFileStore((s) => s.toggleHidden);
   const uploadRef = useRef<HTMLInputElement>(null);
 
   const visibleFiles = showHidden ? files : files.filter((f) => !f.isHidden);
@@ -62,27 +65,31 @@ export function FileTable({
 
         <div className='flex-1' />
 
-        {/* Upload */}
-        <input
-          ref={uploadRef}
-          type='file'
-          className='hidden'
-          onChange={handleFileChange}
-        />
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => uploadRef.current?.click()}
-          disabled={isUploading}
-          className='whitespace-nowrap'
-        >
-          {isUploading ? (
-            <Loader2 size={13} className='animate-spin' />
-          ) : (
-            <Upload size={13} />
-          )}
-          {isUploading ? 'Uploading…' : 'Upload'}
-        </Button>
+        {/* Upload (admin only) */}
+        {canUpload ? (
+          <>
+            <input
+              ref={uploadRef}
+              type='file'
+              className='hidden'
+              onChange={handleFileChange}
+            />
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={() => uploadRef.current?.click()}
+              disabled={isUploading}
+              className='whitespace-nowrap'
+            >
+              {isUploading ? (
+                <Loader2 size={13} className='animate-spin' />
+              ) : (
+                <Upload size={13} />
+              )}
+              {isUploading ? 'Uploading…' : 'Upload'}
+            </Button>
+          </>
+        ) : null}
       </div>
 
       {/* Table */}

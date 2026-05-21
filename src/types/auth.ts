@@ -10,3 +10,8 @@ export interface TokenResponse {
 export interface PublicKeyResponse {
   public_key: string; // PEM
 }
+
+export interface MeResponse {
+  username: string;
+  role: string;
+}

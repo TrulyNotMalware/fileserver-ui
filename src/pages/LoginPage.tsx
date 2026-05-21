@@ -5,7 +5,7 @@ import { useLogin } from '@/hooks/query/useAuth';
 import { useAuthStore } from '@/stores/authStore';
 
 export function LoginPage() {
-  const { isAuthenticated } = useAuthStore();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const navigate = useNavigate();
   const { mutateAsync: login, isPending, error } = useLogin();
 

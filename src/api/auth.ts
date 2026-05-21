@@ -1,5 +1,6 @@
 import type {
   LoginRequest,
+  MeResponse,
   PublicKeyResponse,
   TokenResponse,
 } from '@/types/auth';
@@ -24,4 +25,6 @@ export const authApi = {
     request<void>('/auth/logout', {
       method: 'POST',
     }),
+
+  me: () => request<MeResponse>('/auth/me'),
 };

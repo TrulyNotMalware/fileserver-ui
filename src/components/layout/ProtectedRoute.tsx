@@ -8,7 +8,10 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated } = useAuthStore();
+  // Subscribe to the single boolean (rerender-derived-state) rather than the
+  // whole store object so unrelated updates (accessToken value) don't re-render
+  // every protected page.
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   if (!isAuthenticated) {
     return <Navigate to='/login' replace />;

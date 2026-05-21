@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const authKeys = {
   publicKey: ['auth', 'public-key'] as const,
+  me: ['auth', 'me'] as const,
 };
 
 async function encryptPassword(
@@ -39,8 +40,18 @@ export function usePublicKey() {
   });
 }
 
+export function useMe() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  return useQuery({
+    queryKey: authKeys.me,
+    queryFn: authApi.me,
+    enabled: isAuthenticated,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 export function useLogin() {
-  const { setToken } = useAuthStore();
+  const setToken = useAuthStore((s) => s.setToken);
 
   return useMutation({
     mutationFn: async ({
@@ -61,7 +72,7 @@ export function useLogin() {
 }
 
 export function useLogout() {
-  const { clearToken } = useAuthStore();
+  const clearToken = useAuthStore((s) => s.clearToken);
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -74,7 +85,7 @@ export function useLogout() {
 }
 
 export function useRefresh() {
-  const { setToken } = useAuthStore();
+  const setToken = useAuthStore((s) => s.setToken);
 
   return useMutation({
     mutationFn: authApi.refresh,

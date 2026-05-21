@@ -81,7 +81,9 @@ export function FileRow({
             <Archive size={12} />
           )}
           {file.type === 'directory' ? 'Archive Zip' : 'Download'}
-          {!isDownloading && <Download size={12} className='text-gray-400' />}
+          {isDownloading ? null : (
+            <Download size={12} className='text-gray-400' />
+          )}
         </Button>
       </td>
     </tr>
